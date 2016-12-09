@@ -2,28 +2,15 @@
 :- use_module(library(lists)).
 :- [board].
 
-%confirms size of every internal list
-auxCheckLength([],_).
-auxCheckLength([H|T], InputCount):-
-	length(H, Count),
-	Count == InputCount,
-	auxCheckLength(T, InputCount).
-
-%check if input is a square (list of lists with same size)
-checkLength(Input):-
-	length(Input, InputCount),
-	InputCount > 2,
-	auxCheckLength(Input, InputCount).
-checkLength(Input):-
-	nl,write('Board should be a square and bigger than 2x2.'), nl,nl,
-	fail.
-
-solveGame(Input):-
-	checkLength(Input), !,
-
-	%labeling([], FinalBoard),
+%Input será coordenadas das peças ja na board do tipo [1,0,4] (peça de cor preta(1) de coordenadas (0,4))
+solveGame(Size, Input, Output):-
+	Size > 2, !,
+	length(Output, Size),
+	domain(Output,0,2),
+	NumberOfPieces is abs(Size * Size / 2),
+	write(NumberOfPieces),nl,
+	global_cardinality(Output, [1-NumberOfPieces, 2-NumberOfPieces]),
+	labeling([], Output),
 	nl,
-	printBoard(Input).
-
-
+	printBoard(Output).
 

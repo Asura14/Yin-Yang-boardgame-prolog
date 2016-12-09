@@ -1,6 +1,4 @@
 :- use_module(library(lists)).
-:- use_module(library(random)).
-:-use_module(library(clpfd)).
 
 % 0: casa vazia, 1: peça branca, 2: peça preta
 
@@ -12,7 +10,7 @@ initialBoard(Board):- append([],[
 				[1,0,2,0,1,0],
 				[0,1,0,0,0,1]], Board).
 
-printBoard([],Y):-
+printBoard([],_):-
 	nl, nl.
 printBoard([H|T]):-
 	printSpaces(H),
