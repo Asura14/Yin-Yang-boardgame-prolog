@@ -10,7 +10,7 @@ initialBoard(Board):- append([],[
 				[1,0,2,0,1,0],
 				[0,1,0,0,0,1]], Board).
 
-printBoard([],_):-
+printBoard([]):-
 	nl, nl.
 printBoard([H|T]):-
 	printSpaces(H),
