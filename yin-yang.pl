@@ -3,8 +3,8 @@
 :- use_module(library(system)).
 :- [board].
 
-%Not working yet
-restrictPath([],[],_).
+%Make sure every piece is connected to another piece (Not working yet)
+restrictPath(_,_,6).
 restrictPath(FirstLine, SecondLine, Inc):-
 	Inc2 is Inc + 1,
 	element(Inc, FirstLine, E1),
@@ -12,6 +12,11 @@ restrictPath(FirstLine, SecondLine, Inc):-
 	element(Inc, SecondLine, E3),
 	E1 #= E2 #\/ E1 #= E3,
 	restrictPath(FirstLine, SecondLine, Inc2).
+ restrictLast(L5, L6):-
+ 	element(6, L6, E1),
+ 	element(5, L6, E2),
+ 	element(6, L5, E3),
+ 	E1 #= E2 #\/ E1 #= E3.
 
 %Gets input from user and adds pieces to final board
 restrictFromInput([],_,_,_,_,_,_).
@@ -79,6 +84,11 @@ solveGame(Input, Output):-
 	restrictPath(L3,L4, 1),
 	restrictPath(L4,L5, 1),
 	restrictPath(L5,L6, 1),
+	restrictLast(L1, L2),
+	restrictLast(L2, L3),
+	restrictLast(L3, L4),
+	restrictLast(L4, L5),
+	restrictLast(L5, L6),
 	%STatisctics calculators
 	statistics(runtime, [TimeOfExec,_]),
 	statistics(local_stack, [LocalStack,_]),
