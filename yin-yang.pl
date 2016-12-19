@@ -3,6 +3,16 @@
 :- use_module(library(system)).
 :- [board].
 
+%Not working yet
+restrictPath([],[],_).
+restrictPath(FirstLine, SecondLine, Inc):-
+	Inc2 is Inc + 1,
+	element(Inc, FirstLine, E1),
+	element(Inc2, FirstLine, E2),
+	element(Inc, SecondLine, E3),
+	E1 #= E2 #\/ E1 #= E3,
+	restrictPath(FirstLine, SecondLine, Inc2).
+
 %Gets input from user and adds pieces to final board
 restrictFromInput([],_,_,_,_,_,_).
 restrictFromInput([[Colour,0,X]|T],L1,L2,L3,L4,L5,L6):-
@@ -64,13 +74,20 @@ solveGame(Input, Output):-
 	twoByTwo(L5,L6),
 	append(Output, NewOutput),
 	sum(NewOutput, #=,54),
-	%restrictPath(Output),
+	restrictPath(L1,L2, 1),
+	restrictPath(L2,L3, 1),
+	restrictPath(L3,L4, 1),
+	restrictPath(L4,L5, 1),
+	restrictPath(L5,L6, 1),
+	%STatisctics calculators
 	statistics(runtime, [TimeOfExec,_]),
 	statistics(local_stack, [LocalStack,_]),
 	statistics(trail, [TrailStack,_]),
 	statistics(choice, [BackTrackStack,_]),
+	%Labeling
 	labeling([], NewOutput),
 	nl, printBoard(Output),	
+	%Statistics
 	nl, write('Execution time: '), write(TimeOfExec), write(' milliseconds.'),
 	nl, write('Local Stack: '), write(LocalStack), write(' bytes.'),
 	nl, write('Trail Stack: '), write(TrailStack), write(' bytes.'),
