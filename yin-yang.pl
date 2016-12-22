@@ -28,29 +28,29 @@ restrictLastLine(SecondLine, FirstLine, Inc):-
 
 %Gets input from user and adds pieces to final board
 restrictFromInput([],_,_,_,_,_,_).
-restrictFromInput([[Colour,0,X]|T],L1,L2,L3,L4,L5,L6):-
+restrictFromInput([[Colour,X,0]|T],L1,L2,L3,L4,L5,L6):-
 	X2 is X + 1,
-	element(X2, L1, Colour),
+	element(X2, L1, Colour), write('Input at line 0'), nl,
 	restrictFromInput(T,L1,L2,L3,L4,L5,L6).
-restrictFromInput([[Colour,1,X]|T],L1,L2,L3,L4,L5,L6):-
+restrictFromInput([[Colour,X,1]|T],L1,L2,L3,L4,L5,L6):-
 	X2 is X + 1,
-	element(X2, L2, Colour),
+	element(X2, L2, Colour), write('Input at line 1'), nl,
 	restrictFromInput(T,L1,L2,L3,L4,L5,L6).
-restrictFromInput([[Colour,2,X]|T],L1,L2,L3,L4,L5,L6):-
+restrictFromInput([[Colour,X,2]|T],L1,L2,L3,L4,L5,L6):-
 	X2 is X + 1,
-	element(X2, L3, Colour),
+	element(X2, L3, Colour), write('Input at line 2'), nl,
 	restrictFromInput(T,L1,L2,L3,L4,L5,L6).
-restrictFromInput([[Colour,3,X]|T],L1,L2,L3,L4,L5,L6):-
+restrictFromInput([[Colour,X,3]|T],L1,L2,L3,L4,L5,L6):-
 	X2 is X + 1,
-	element(X2, L4, Colour),
+	element(X2, L4, Colour), write('Input at line 3'), nl,
 	restrictFromInput(T,L1,L2,L3,L4,L5,L6).
-restrictFromInput([[Colour,4,X]|T],L1,L2,L3,L4,L5,L6):-
+restrictFromInput([[Colour,X,4]|T],L1,L2,L3,L4,L5,L6):-
 	X2 is X + 1,
-	element(X2, L5, Colour),
+	element(X2, L5, Colour), write('Input at line 4'), nl,
 	restrictFromInput(T,L1,L2,L3,L4,L5,L6).
-restrictFromInput([[Colour,5,X]|T],L1,L2,L3,L4,L5,L6):-
+restrictFromInput([[Colour,X,5]|T],L1,L2,L3,L4,L5,L6):-
 	X2 is X + 1,
-	element(X2, L6, Colour),
+	element(X2, L6, Colour), write('Input at line 5'), nl,
 	restrictFromInput(T,L1,L2,L3,L4,L5,L6).
 
 %Not allow 2x2of the same colour
@@ -67,13 +67,13 @@ defineLines([L|T]):-
 	domain(L,1,2),
 	defineLines(T).
 
-%Input são coordenadas das peças ja na board do tipo [1,0,4] (peça de cor preta(1) de coordenadas (0,4))
-	%Example: solveGame([[1,0,4],[2,1,1]], Board).
+%Input são coordenadas das peças ja na board do tipo [1,0,4] (peça de cor preta(1) de coordenadas (0,4), sendo cor branca = 2)
+	%Example 1: solveGame([[1,0,4],[2,1,1]], Board). Example 2: solveGame([[2,0,4],[2,1,5],[2,5,5],[2,4,4],[2,2,2],[2,3,1],[1,2,4],[1,1,3],[1,4,3],[1,4,2],[1,5,3]], Board).
 solveGame(Input, Output):-
 	nl,
 	Output = [L1,L2,L3,L4,L5,L6],
 	defineLines(Output),
-	restrictFromInput(Input,L1,L2,L3,L4,L5,L6),
+	restrictFromInput(Input,L1,L2,L3,L4,L5,L6), !,
 	twoByTwo(L1,L2),
 	twoByTwo(L2,L3),
 	twoByTwo(L3,L4),
@@ -91,15 +91,14 @@ solveGame(Input, Output):-
 	restrictLastCol(L5, L6),
 	restrictLastLine(L6, L5, 1),
 	append(Output, NewOutput),
-	%sum(NewOutput, #=,54),
-	%---
-	%STatisctics calculators
+	%sum(NewOutput, #=,54), %Restriction not used
+	%Statisctics calculators
 	statistics(runtime, [TimeOfExec,_]),
 	statistics(local_stack, [LocalStack,_]),
 	statistics(trail, [TrailStack,_]),
 	statistics(choice, [BackTrackStack,_]),
 	%Labeling
-	labeling([middle, ff], NewOutput), nl, printBoard(Output),
+	labeling([ff,bisect, up], NewOutput), nl, printBoard(Output),
 	%Statistics
 	nl, write('Execution time: '), write(TimeOfExec), write(' milliseconds.'),
 	nl, write('Local Stack: '), write(LocalStack), write(' bytes.'),
