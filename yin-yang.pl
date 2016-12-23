@@ -98,7 +98,7 @@ solveGame(Input, Output):-
 	statistics(trail, [TrailStack,_]),
 	statistics(choice, [BackTrackStack,_]),
 	%Labeling
-	labeling([ff,bisect, up], NewOutput), nl, printBoard(Output),
+	labeling([], NewOutput), nl, printBoard(Output),
 	%Statistics
 	nl, write('Execution time: '), write(TimeOfExec), write(' milliseconds.'),
 	nl, write('Local Stack: '), write(LocalStack), write(' bytes.'),
